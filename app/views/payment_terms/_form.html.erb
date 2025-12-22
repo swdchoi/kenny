@@ -1,0 +1,52 @@
+<%= form_with(model: payment_term) do |form| %>
+  <% if payment_term.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(payment_term.errors.count, "error") %> prohibited this payment_term from being saved:</h2>
+
+      <ul>
+        <% payment_term.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :contract_id_id, style: "display: block" %>
+    <%= form.text_field :contract_id_id %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div>
+    <%= form.label :percentage, style: "display: block" %>
+    <%= form.text_field :percentage %>
+  </div>
+
+  <div>
+    <%= form.label :amount, style: "display: block" %>
+    <%= form.text_field :amount %>
+  </div>
+
+  <div>
+    <%= form.label :target_date, style: "display: block" %>
+    <%= form.date_field :target_date %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.number_field :status %>
+  </div>
+
+  <div>
+    <%= form.label :completed_date, style: "display: block" %>
+    <%= form.date_field :completed_date %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

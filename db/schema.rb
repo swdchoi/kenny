@@ -10,7 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_22_081132) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_22_090943) do
+  create_table "clients", force: :cascade do |t|
+    t.string "email"
+    t.string "company_name"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.integer "client_id_id", null: false
+    t.string "title"
+    t.text "description"
+    t.date "start_date"
+    t.date "end_date"
+    t.float "total_amount"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id_id"], name: "index_contracts_on_client_id_id"
+  end
+
+  create_table "milestones", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.boolean "status"
+    t.integer "contract_id_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id_id"], name: "index_milestones_on_contract_id_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -22,4 +53,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_081132) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "contracts", "client_ids"
+  add_foreign_key "milestones", "contract_ids"
 end

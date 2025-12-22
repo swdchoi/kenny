@@ -1,0 +1,12 @@
+<% content_for :title, "Editing payment term" %>
+
+<h1>Editing payment term</h1>
+
+<%= render "form", payment_term: @payment_term %>
+
+<br>
+
+<div>
+  <%= link_to "Show this payment term", @payment_term %> |
+  <%= link_to "Back to payment terms", payment_terms_path %>
+</div>
