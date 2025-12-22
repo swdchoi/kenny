@@ -20,7 +20,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
   end
 
   create_table "contracts", force: :cascade do |t|
-    t.integer "client_id_id", null: false
+    t.integer "client_id", null: false
     t.string "title"
     t.text "description"
     t.date "start_date"
@@ -29,34 +29,34 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["client_id_id"], name: "index_contracts_on_client_id_id"
+    t.index ["client_id"], name: "index_contracts_on_client_id"
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.integer "contract_id_id", null: false
-    t.integer "payment_term_id_id", null: false
+    t.integer "contract_id", null: false
+    t.integer "payment_term_id", null: false
     t.integer "status"
     t.date "issue_date"
     t.date "due_date"
     t.date "paid_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contract_id_id"], name: "index_invoices_on_contract_id_id"
-    t.index ["payment_term_id_id"], name: "index_invoices_on_payment_term_id_id"
+    t.index ["contract_id"], name: "index_invoices_on_contract_id"
+    t.index ["payment_term_id"], name: "index_invoices_on_payment_term_id"
   end
 
   create_table "milestones", force: :cascade do |t|
     t.string "name"
     t.date "date"
     t.boolean "status"
-    t.integer "contract_id_id", null: false
+    t.integer "contract_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contract_id_id"], name: "index_milestones_on_contract_id_id"
+    t.index ["contract_id"], name: "index_milestones_on_contract_id"
   end
 
   create_table "payment_terms", force: :cascade do |t|
-    t.integer "contract_id_id", null: false
+    t.integer "contract_id", null: false
     t.string "description"
     t.float "percentage"
     t.float "amount"
@@ -65,7 +65,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
     t.date "completed_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contract_id_id"], name: "index_payment_terms_on_contract_id_id"
+    t.index ["contract_id"], name: "index_payment_terms_on_contract_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -80,9 +80,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "contracts", "client_ids"
-  add_foreign_key "invoices", "contract_ids"
-  add_foreign_key "invoices", "payment_term_ids"
-  add_foreign_key "milestones", "contract_ids"
-  add_foreign_key "payment_terms", "contract_ids"
+  add_foreign_key "contracts", "clients"
+  add_foreign_key "invoices", "contracts"
+  add_foreign_key "invoices", "payment_terms"
+  add_foreign_key "milestones", "contracts"
+  add_foreign_key "payment_terms", "contracts"
 end

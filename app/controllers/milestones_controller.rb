@@ -3,7 +3,8 @@ class MilestonesController < ApplicationController
 
   # GET /milestones or /milestones.json
   def index
-    @milestones = Milestone.all
+    @contract = Contract.find(params[:contract_id])
+    @milestones = @contract.milestones.all
   end
 
   # GET /milestones/1 or /milestones/1.json

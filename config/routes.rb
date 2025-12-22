@@ -1,17 +1,30 @@
 Rails.application.routes.draw do
-  resources :invoices
-  resources :payment_terms
-  resources :milestones
-  resources :contracts
-  resources :clients
-  devise_for :users
-  
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  root "home#index"
+resources :clients do
+  resources :contracts, shallow: true do
+    resources :payment_terms, shallow: true
+    resources :milestones, shallow: true
+  end
+end
 
-  # Reveal healt h status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+resources :payment_terms do
+  resources :invoices, shallow: true
+end
+
+  devise_for :users
+
+    # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+    authenticated :user do
+    root "dashboard#index", as: :authenticated_root
+  end
+
+    unauthenticated do
+      root "home#index", as: :unauthenticated_root
+    end
+
+    root "home#index"
+    # Reveal healt h status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+    # Can be used by load balancers and uptime monitors to verify that the app is live.
+    get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

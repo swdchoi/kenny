@@ -4,7 +4,7 @@ class CreateMilestones < ActiveRecord::Migration[8.0]
       t.string :name
       t.date :date
       t.boolean :status
-      t.references :contract_id, null: false, foreign_key: true
+      t.references :contract, null: false, foreign_key: true
 
       t.timestamps
     end

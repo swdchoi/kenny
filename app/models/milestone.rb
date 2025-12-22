@@ -1,3 +1,3 @@
 class Milestone < ApplicationRecord
-  belongs_to :contract_id
+  belongs_to :contract
 end

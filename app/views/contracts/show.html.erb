@@ -4,7 +4,8 @@
 
 <div>
   <%= link_to "Edit this contract", edit_contract_path(@contract) %> |
-  <%= link_to "Back to contracts", contracts_path %>
-
-  <%= button_to "Destroy this contract", @contract, method: :delete %>
+  <%= button_to "Destroy this contract", contract_path(@contract), method: :delete %>
 </div>
+
+<%= link_to "Payment Terms", contract_payment_terms_path(@contract)%>
+<%= link_to "Milestones", contract_milestones_path(@contract)%>

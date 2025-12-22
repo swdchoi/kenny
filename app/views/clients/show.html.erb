@@ -2,6 +2,7 @@
 
 <%= render @client %>
 
+<%= link_to "contracts", client_contracts_path(@client) %>
 <div>
   <%= link_to "Edit this client", edit_client_path(@client) %> |
   <%= link_to "Back to clients", clients_path %>

@@ -3,6 +3,10 @@ class ContractsController < ApplicationController
 
   # GET /contracts or /contracts.json
   def index
+    if params[:client_id].present?
+      @client = Client.find(params[:client_id])
+      @contracts = @client.contracts
+    end
     @contracts = Contract.all
   end
 
@@ -12,7 +16,8 @@ class ContractsController < ApplicationController
 
   # GET /contracts/new
   def new
-    @contract = Contract.new
+    @client = Client.find(params[:client_id])
+    @contract =  @client.contracts.build
   end
 
   # GET /contracts/1/edit
@@ -21,7 +26,8 @@ class ContractsController < ApplicationController
 
   # POST /contracts or /contracts.json
   def create
-    @contract = Contract.new(contract_params)
+    @client = Client.find(params[:client_id])
+    @contract =  @client.contracts.build(contract_params)
 
     respond_to do |format|
       if @contract.save
