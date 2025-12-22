@@ -1,0 +1,55 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 col-xl-5">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-4">
+            <h2 class="fw-bold mb-1">Welcome back</h2>
+            <p class="text-muted mb-0">
+              Log in to continue using Kenny
+            </p>
+          </div>
+
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <!-- Email -->
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label fw-semibold" %>
+              <%= f.email_field :email,
+                class: "form-control form-control-lg",
+                autofocus: true,
+                autocomplete: "email",
+                placeholder: "you@company.com" %>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <%= f.label :password, class: "form-label fw-semibold" %>
+              <%= f.password_field :password,
+                class: "form-control form-control-lg",
+                autocomplete: "current-password",
+                placeholder: "••••••••" %>
+            </div>
+
+            <!-- Remember me -->
+            <% if devise_mapping.rememberable? %>
+              <div class="form-check mb-4">
+                <%= f.check_box :remember_me, class: "form-check-input" %>
+                <%= f.label :remember_me, class: "form-check-label" %>
+              </div>
+            <% end %>
+
+            <!-- Submit -->
+            <div class="d-grid mb-3">
+              <%= f.submit "Log in",
+                class: "btn btn-primary btn-lg rounded-pill" %>
+            </div>
+          <% end %>
+
+          <div class="text-center small text-muted">
+            <%= render "devise/shared/links" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
