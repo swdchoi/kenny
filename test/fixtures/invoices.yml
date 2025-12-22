@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contract_id: one
+  payment_term_id: one
+  status: 1
+  issue_date: 2025-12-22
+  due_date: 2025-12-22
+  paid_date: 2025-12-22
+
+two:
+  contract_id: two
+  payment_term_id: two
+  status: 1
+  issue_date: 2025-12-22
+  due_date: 2025-12-22
+  paid_date: 2025-12-22

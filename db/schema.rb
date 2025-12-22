@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_22_090943) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
   create_table "clients", force: :cascade do |t|
     t.string "email"
     t.string "company_name"
@@ -32,6 +32,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_090943) do
     t.index ["client_id_id"], name: "index_contracts_on_client_id_id"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.integer "contract_id_id", null: false
+    t.integer "payment_term_id_id", null: false
+    t.integer "status"
+    t.date "issue_date"
+    t.date "due_date"
+    t.date "paid_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id_id"], name: "index_invoices_on_contract_id_id"
+    t.index ["payment_term_id_id"], name: "index_invoices_on_payment_term_id_id"
+  end
+
   create_table "milestones", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -40,6 +53,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_090943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contract_id_id"], name: "index_milestones_on_contract_id_id"
+  end
+
+  create_table "payment_terms", force: :cascade do |t|
+    t.integer "contract_id_id", null: false
+    t.string "description"
+    t.float "percentage"
+    t.float "amount"
+    t.date "target_date"
+    t.integer "status"
+    t.date "completed_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id_id"], name: "index_payment_terms_on_contract_id_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -55,5 +81,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_090943) do
   end
 
   add_foreign_key "contracts", "client_ids"
+  add_foreign_key "invoices", "contract_ids"
+  add_foreign_key "invoices", "payment_term_ids"
   add_foreign_key "milestones", "contract_ids"
+  add_foreign_key "payment_terms", "contract_ids"
 end
