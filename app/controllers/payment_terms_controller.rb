@@ -3,7 +3,8 @@ class PaymentTermsController < ApplicationController
 
   # GET /payment_terms or /payment_terms.json
   def index
-    @payment_terms = PaymentTerm.all
+    @contract = Contract.find(params[:contract_id])
+    @payment_terms = @contract.payment_terms.all
   end
 
   # GET /payment_terms/1 or /payment_terms/1.json
@@ -12,7 +13,8 @@ class PaymentTermsController < ApplicationController
 
   # GET /payment_terms/new
   def new
-    @payment_term = PaymentTerm.new
+    @contract = Contract.find(params[:contract_id])
+    @payment_term = @contract.payment_terms.build
   end
 
   # GET /payment_terms/1/edit
@@ -21,7 +23,8 @@ class PaymentTermsController < ApplicationController
 
   # POST /payment_terms or /payment_terms.json
   def create
-    @payment_term = PaymentTerm.new(payment_term_params)
+    @contract = Contract.find(params[:contract_id])
+    @payment_term = @contract.payment_terms.build(payment_term_params)
 
     respond_to do |format|
       if @payment_term.save

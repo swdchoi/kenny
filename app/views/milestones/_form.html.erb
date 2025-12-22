@@ -1,4 +1,4 @@
-<%= form_with(model: milestone) do |form| %>
+<%= form_with(model: [contract, milestone]) do |form| %>
   <% if milestone.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(milestone.errors.count, "error") %> prohibited this milestone from being saved:</h2>
@@ -24,11 +24,6 @@
   <div>
     <%= form.label :status, style: "display: block" %>
     <%= form.checkbox :status %>
-  </div>
-
-  <div>
-    <%= form.label :contract_id_id, style: "display: block" %>
-    <%= form.text_field :contract_id_id %>
   </div>
 
   <div>

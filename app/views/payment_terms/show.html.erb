@@ -2,6 +2,18 @@
 
 <%= render @payment_term %>
 
+<% if @payment_term.invoice.present? %>
+  <%= @payment_term.invoice.status %>
+  <%= @payment_term.invoice.issue_date %>
+  <%= @payment_term.invoice.due_date %>
+  <%= @payment_term.invoice.paid_date %>
+
+<% else %>
+
+<%=link_to "issue invoice", new_payment_term_invoice_path(@payment_term)%>
+
+<% end %>
+
 <div>
   <%= link_to "Edit this payment term", edit_payment_term_path(@payment_term) %> |
   <%= link_to "Back to payment terms", payment_terms_path %>

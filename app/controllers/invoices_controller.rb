@@ -3,7 +3,8 @@ class InvoicesController < ApplicationController
 
   # GET /invoices or /invoices.json
   def index
-    @invoices = Invoice.all
+    @payment_term = PaymentTerm.find(params[:payment_term_id])
+    @invoices = @payment_term.invoice
   end
 
   # GET /invoices/1 or /invoices/1.json
@@ -12,7 +13,8 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/new
   def new
-    @invoice = Invoice.new
+    @payment_term = PaymentTerm.find(params[:payment_term_id])
+    @invoice = @payment_term.build_invoice
   end
 
   # GET /invoices/1/edit
@@ -21,7 +23,9 @@ class InvoicesController < ApplicationController
 
   # POST /invoices or /invoices.json
   def create
-    @invoice = Invoice.new(invoice_params)
+    @payment_term = PaymentTerm.find(params[:payment_term_id])
+    @invoice = @payment_term.build_invoice(invoice_params)
+
 
     respond_to do |format|
       if @invoice.save

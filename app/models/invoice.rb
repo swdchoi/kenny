@@ -1,9 +1,6 @@
 class Invoice < ApplicationRecord
-  belongs_to :contract
   belongs_to :payment_term
 
-  validates :invoice_number, presence: true, uniqueness: true
-  validates :amount, presence: true
   validates :issue_date, presence: true
   validates :due_date, presence: true
 

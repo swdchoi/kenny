@@ -13,7 +13,8 @@ class MilestonesController < ApplicationController
 
   # GET /milestones/new
   def new
-    @milestone = Milestone.new
+    @contract = Contract.find(params[:contract_id])
+    @milestone = @contract.milestones.build
   end
 
   # GET /milestones/1/edit
@@ -22,7 +23,8 @@ class MilestonesController < ApplicationController
 
   # POST /milestones or /milestones.json
   def create
-    @milestone = Milestone.new(milestone_params)
+    @contract = Contract.find(params[:contract_id])
+    @milestone = @contract.milestones.build(milestone_params)
 
     respond_to do |format|
       if @milestone.save

@@ -1,6 +1,6 @@
 class PaymentTerm < ApplicationRecord
   belongs_to :contract
-  has_many :invoices
+  has_one :invoice
 
   validates :description, presence: true
   validates :percentage, presence: true

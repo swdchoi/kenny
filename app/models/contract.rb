@@ -2,7 +2,6 @@ class Contract < ApplicationRecord
   belongs_to :client
 
   has_many :payment_terms, dependent: :destroy
-  has_many :invoices, dependent: :destroy
   has_many :milestones, dependent: :destroy
 
   validates :title, presence: true

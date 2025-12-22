@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_22_110747) do
   create_table "clients", force: :cascade do |t|
     t.string "email"
     t.string "company_name"
@@ -33,7 +33,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.integer "contract_id", null: false
     t.integer "payment_term_id", null: false
     t.integer "status"
     t.date "issue_date"
@@ -41,7 +40,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
     t.date "paid_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contract_id"], name: "index_invoices_on_contract_id"
     t.index ["payment_term_id"], name: "index_invoices_on_payment_term_id"
   end
 
@@ -81,7 +79,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_091341) do
   end
 
   add_foreign_key "contracts", "clients"
-  add_foreign_key "invoices", "contracts"
   add_foreign_key "invoices", "payment_terms"
   add_foreign_key "milestones", "contracts"
   add_foreign_key "payment_terms", "contracts"
