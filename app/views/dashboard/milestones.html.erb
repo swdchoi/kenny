@@ -1,0 +1,18 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Milestones" %>
+
+<h1>Milestones</h1>
+
+<div id="milestones">
+  <% @milestones.each do |milestone| %>
+    <%= render milestone %>
+    <p>
+      <%= link_to "Edit this milestone", edit_milestone_path(milestone) %>
+      <%= button_to "Destroy this milestone", milestone, method: :delete %>
+    </p>
+  <% end %>
+</div>
+
+
+

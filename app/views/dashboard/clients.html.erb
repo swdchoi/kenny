@@ -1,0 +1,7 @@
+<% @clients.each do |client| %>
+<p><%= client.email %></p>
+<%= link_to "Show", client_path(client) %>
+<% end %>
+
+
+<%= link_to "New client", new_client_path %>

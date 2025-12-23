@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Contracts" %>
+
+<h1><% if @client %><%=@client.company_name %><%end%> Contracts</h1>
+
+<div id="contracts">
+  <% @contracts.each do |contract| %>
+    <%= render contract %>
+    <p>
+      <%= link_to "Show", contract_path(contract, client_id: contract.client.id) %>
+    </p>
+  <% end %>
+</div>
+
+
