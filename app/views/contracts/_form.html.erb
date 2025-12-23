@@ -1,4 +1,4 @@
-<%= form_with(model: [client, contract]) do |form| %>
+<%= form_with(model: contract, url: contract.persisted? ? nil : client_contracts_path(@client)) do |form| %>
   <% if contract.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</h2>

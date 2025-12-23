@@ -19,6 +19,7 @@ class MilestonesController < ApplicationController
 
   # GET /milestones/1/edit
   def edit
+     @contract = Contract.find(params[:contract_id])
   end
 
   # POST /milestones or /milestones.json

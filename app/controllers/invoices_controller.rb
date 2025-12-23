@@ -19,6 +19,7 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1/edit
   def edit
+    @payment_term = PaymentTerm.find(params[:payment_term_id])
   end
 
   # POST /invoices or /invoices.json

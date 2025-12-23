@@ -22,6 +22,7 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1/edit
   def edit
+    @client = Client.find(params[:client_id])
   end
 
   # POST /contracts or /contracts.json
@@ -55,10 +56,12 @@ class ContractsController < ApplicationController
 
   # DELETE /contracts/1 or /contracts/1.json
   def destroy
+    @client = Client.find(@contract.client.id)
     @contract.destroy!
 
+
     respond_to do |format|
-      format.html { redirect_to contracts_path, notice: "Contract was successfully destroyed.", status: :see_other }
+      format.html { redirect_to contracts_path(@client), notice: "Contract was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end

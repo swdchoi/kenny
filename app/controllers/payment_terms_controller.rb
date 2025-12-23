@@ -19,6 +19,7 @@ class PaymentTermsController < ApplicationController
 
   # GET /payment_terms/1/edit
   def edit
+    @contract = Contract.find(params[:contract_id])
   end
 
   # POST /payment_terms or /payment_terms.json

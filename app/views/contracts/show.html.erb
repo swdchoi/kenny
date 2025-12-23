@@ -3,8 +3,8 @@
 <%= render @contract %>
 
 <div>
-  <%= link_to "Edit this contract", edit_contract_path(@contract) %> |
-  <%= button_to "Destroy this contract", contract_path(@contract), method: :delete %>
+  <%= link_to "Edit this contract", edit_contract_path(@contract, client_id: @contract.client.id) %> |
+  <%= button_to "Destroy this contract", contract_path(@contract), method: :delete, data: {turbo: false} %>
 </div>
 
 <%= link_to "Payment Terms", contract_payment_terms_path(@contract)%>
