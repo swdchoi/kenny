@@ -8,5 +8,5 @@
 
 <div>
   <%= link_to "Show this contract", contract_path(@contract) %> |
-  <%= link_to "Back to contracts", client_contracts_path(@client) %>
+  <%= link_to "Back to contracts", client_contracts_path(client_id: @contract.client.id) %>
 </div>

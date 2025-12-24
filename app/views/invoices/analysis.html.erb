@@ -1,0 +1,81 @@
+<div class="container my-4">
+  <h2 class="mb-4">Financial Dashboard</h2>
+  <!-- KPI CARDS -->
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-primary">
+        <div class="card-body">
+          <h6 class="text-muted">Issued (This Month)</h6>
+          <h3 class="fw-bold">$<%= number_with_precision(@issued_total, precision: 2) %></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-success">
+        <div class="card-body">
+          <h6 class="text-muted">Collected</h6>
+          <h3 class="fw-bold text-success">$<%= number_with_precision(@paid_total, precision: 2) %></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-warning">
+        <div class="card-body">
+          <h6 class="text-muted">Outstanding</h6>
+          <h3 class="fw-bold text-warning">$<%= number_with_precision(@outstanding_total, precision: 2) %></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-danger">
+        <div class="card-body">
+          <h6 class="text-muted">Overdue</h6>
+          <h3 class="fw-bold text-danger">$<%= number_with_precision(@overdue_total, precision: 2) %></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <h5 class="mb-3">Invoice Issued (Last 6 Months)</h5>
+      <canvas id="invoiceChart"></canvas>
+    </div>
+  </div>
+
+  <!-- UPCOMING INVOICES -->
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <h5>Upcoming Invoices</h5>
+
+      <table class="table table-sm mt-3">
+        <thead>
+          <tr>
+            <th>Contract</th>
+            <th>Due Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @upcoming_invoices.each do |invoice| %>
+            <tr class="<%= 'table-danger' if invoice.due_date < Date.today %>">
+              <td><%= invoice.payment_term.contract.title %></td>
+              <td><%= invoice.due_date %></td>
+              <td>$<%= invoice.amount %></td>
+              <td>
+                <span class="badge bg-<%= invoice.status == 'overdue' ? 'danger' : 'warning' %>">
+                  <%= invoice.status.capitalize %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

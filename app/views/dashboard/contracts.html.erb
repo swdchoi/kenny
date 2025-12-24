@@ -1,16 +1,60 @@
-<p style="color: green"><%= notice %></p>
+<div class="container p-3">
 
 <% content_for :title, "Contracts" %>
 
-<h1><% if @client %><%=@client.company_name %><%end%> Contracts</h1>
-
-<div id="contracts">
-  <% @contracts.each do |contract| %>
-    <%= render contract %>
-    <p>
-      <%= link_to "Show", contract_path(contract, client_id: contract.client.id) %>
-    </p>
-  <% end %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h4 mb-0">
+    <% if @client %>
+      <%= @client.company_name %>
+    <% end %>
+    Contracts
+  </h1>
 </div>
 
+<div class="row g-3" id="contracts">
+  <% @contracts.each do |contract| %>
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow-sm h-100" id="<%= dom_id contract %>">
+        <div class="card-body d-flex flex-column">
 
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title mb-0">
+              <%= contract.title %>
+            </h5>
+
+            <span class="badge bg-<%= {
+              "active" => "success",
+              "completed" => "primary",
+              "cancelled" => "danger"
+            }[contract.status] %>">
+              <%= contract.status %>
+            </span>
+          </div>
+
+          <p class="text-muted small mb-3">
+            <%= truncate(contract.description, length: 80) %>
+          </p>
+
+          <ul class="list-unstyled small mb-4">
+            <li>
+              <strong>Period:</strong>
+              <%= contract.start_date %> → <%= contract.end_date %>
+            </li>
+            <li>
+              <strong>Total:</strong>
+              <%= number_to_currency(contract.total_amount) %>
+            </li>
+          </ul>
+
+          <div class="mt-auto">
+            <%= link_to "View contract",
+              contract_path(contract, client_id: contract.client.id),
+              class: "btn btn-sm btn-outline-primary w-100" %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+</div>

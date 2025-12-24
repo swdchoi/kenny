@@ -7,16 +7,15 @@
   <%= @payment_term.invoice.issue_date %>
   <%= @payment_term.invoice.due_date %>
   <%= @payment_term.invoice.paid_date %>
-
+  <%= link_to "Edit Invoice", edit_invoice_path(@payment_term.invoice)%>
+  <%= button_to "Delete", invoice_path(@payment_term.invoice), method: :delete %>
 <% else %>
-
-<%=link_to "issue invoice", new_payment_term_invoice_path(@payment_term)%>
-
+  <%=link_to "issue invoice", new_payment_term_invoice_path(@payment_term)%>
 <% end %>
 
 <div>
   <%= link_to "Edit this payment term", edit_payment_term_path(@payment_term) %> |
-  <%= link_to "Back to payment terms", payment_terms_path %>
+  <%= link_to "Back to payment terms", payment_terms_path(contract_id:@payment_term.contract.id) %>
 
   <%= button_to "Destroy this payment term", @payment_term, method: :delete %>
 </div>

@@ -12,6 +12,8 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1 or /contracts/1.json
   def show
+    @milestones = @contract.milestones
+    @payment_terms = @contract.payment_terms
   end
 
   # GET /contracts/new
@@ -22,7 +24,6 @@ class ContractsController < ApplicationController
 
   # GET /contracts/1/edit
   def edit
-    @client = Client.find(params[:client_id])
   end
 
   # POST /contracts or /contracts.json

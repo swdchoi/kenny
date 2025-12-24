@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_22_110747) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_24_063350) do
   create_table "clients", force: :cascade do |t|
     t.string "email"
     t.string "company_name"
@@ -46,10 +46,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_110747) do
   create_table "milestones", force: :cascade do |t|
     t.string "name"
     t.date "date"
-    t.boolean "status"
+    t.string "status", default: "pending"
     t.integer "contract_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "completed_date"
+    t.text "description"
     t.index ["contract_id"], name: "index_milestones_on_contract_id"
   end
 
@@ -63,7 +65,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_110747) do
     t.date "completed_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "milestone_id"
     t.index ["contract_id"], name: "index_payment_terms_on_contract_id"
+    t.index ["milestone_id"], name: "index_payment_terms_on_milestone_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -82,4 +86,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_22_110747) do
   add_foreign_key "invoices", "payment_terms"
   add_foreign_key "milestones", "contracts"
   add_foreign_key "payment_terms", "contracts"
+  add_foreign_key "payment_terms", "milestones"
 end

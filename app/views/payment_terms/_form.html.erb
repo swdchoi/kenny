@@ -1,49 +1,163 @@
+<div class="container my-5" data-controller="paymentterms">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <h4 class="card-title mb-2">
+            <%= payment_term.persisted? ? "Edit Payment Term" : "New Payment Term" %>
+          </h4>
+
+          <p class="text-muted mb-2">
+            Contract total:
+            $ <strong data-paymentterms-target="total">
+              <%= number_with_precision(payment_term.contract.total_amount, precision: 2) %>
+            </strong>
+          </p>
+
+          <p class="text-muted mb-4">
+            Payment Planned:
+            $ <strong>
+              <%= number_with_precision(@payment_planned, precision: 2) %>
+            </strong>
+          </p>
+
+          <%= form_with(
+                model: payment_term,
+                url: payment_term.persisted? ? nil : contract_payment_terms_path(@contract),
+                local: true
+              ) do |form| %>
+
+            <% if payment_term.errors.any? %>
+              <div class="alert alert-danger">
+                <h6 class="mb-2">
+                  <%= pluralize(payment_term.errors.count, "error") %>
+                  prevented this payment term from being saved:
+                </h6>
+                <ul class="mb-0">
+                  <% payment_term.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- Percentage & Amount -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <%= form.label :percentage, "Percentage (%)", class: "form-label" %>
+                <%= form.number_field :percentage, step: 0.01, class: "form-control", data: {
+                    paymentterms_target: "percentage",
+                    action: "input->paymentterms#calculateFromPercentage"
+                  }
+                  %>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :amount, class: "form-label" %>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <%= form.number_field :amount, step: 0.01, class: "form-control", data: {
+                    paymentterms_target: "amount",
+                    action: "input->paymentterms#calculateFromAmount"
+                  }%>
+                </div>
+              </div>
+            </div>
+        
+          <% if payment_term.persisted? %>
+          <% if payment_term.milestone %>
+          <div class="m-2">
+             <span class="badge rounded-pill bg-primary">Milestone Dependent!</span>
+          </div>
+          <% end %>
+          <% else %>
+
+            <div class="mb-3">
+              <div class="btn-group w-100 mb-3" role="group">
+                  <input type="radio"
+                        class="btn-check"
+                        name="mode"
+                        id="mode_manual"
+                        value="manual"
+                        checked
+                        data-action="change->paymentterms#switch">
+
+                  <label class="btn btn-outline-primary" for="mode_manual">
+                    Manual
+                  </label>
+
+                  <input type="radio"
+                        class="btn-check"
+                        name="mode"
+                        id="mode_milestone"
+                        value="milestone"
+                        data-action="change->paymentterms#switch">
+
+                  <label class="btn btn-outline-primary" for="mode_milestone">
+                    Milestone based
+                  </label>
+                </div>
+            </div>
+        
+            <div data-paymentterms-target="milestone" class="d-none">
+              <p>Select the milestone this payment will be based on</p>
+            <% @milestones.each do |mile| %>
+              <div class="form-check mb-2">
+                <%= radio_button_tag "payment_term[milestone_id]", mile.id, false, class: "form-check-input" %>
+                <%= label_tag "milestone_id_#{mile.id}", mile.name, class: "form-check-label" %>
+              </div>
+          <% end %>
+          </div>
+          <% end %>
+            <!-- Description -->
+            <div data-paymentterms-target="manual">
+              <div class="mb-3">
+                <%= form.label :description, class: "form-label" %>
+                <%= form.text_field :description, class: "form-control" %>
+              </div>
+
+              <div class="mb-3">
+                <%= form.label :target_date, class: "form-label" %>
+                <%= form.date_field :target_date, class: "form-control" %>
+              </div>
+            </div>
+            <% if payment_term.persisted? %>
+              <hr>
+
+              <!-- Status -->
+              <div class="mb-3">
+                <%= form.label :status, class: "form-label" %>
+                <%= form.select :status,
+                    PaymentTerm.statuses.keys.map { |s| [s.titleize, s] },
+                    {},
+                    class: "form-select"
+                %>
+              </div>
+
+              <!-- Completed date -->
+              <div class="mb-3">
+                <%= form.label :completed_date, class: "form-label" %>
+                <%= form.date_field :completed_date, class: "form-control" %>
+              </div>
+            <% end %>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
 
 
-<%= form_with(model:[contract, payment_term]) do |form| %>
-  <% if payment_term.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(payment_term.errors.count, "error") %> prohibited this payment_term from being saved:</h2>
+              <%= form.submit(
+                    payment_term.persisted? ? "Update Payment Term" : "Create Payment Term",
+                    class: "btn btn-primary px-4"
+                  ) %>
+            </div>
 
-      <ul>
-        <% payment_term.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+          <% end %>
+
+        </div>
+      </div>
+
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
   </div>
-
-  <div>
-    <%= form.label :percentage, style: "display: block" %>
-    <%= form.text_field :percentage %>
-  </div>
-
-  <div>
-    <%= form.label :amount, style: "display: block" %>
-    <%= form.text_field :amount %>
-  </div>
-
-  <div>
-    <%= form.label :target_date, style: "display: block" %>
-    <%= form.date_field :target_date %>
-  </div>
-
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.number_field :status %>
-  </div>
-
-  <div>
-    <%= form.label :completed_date, style: "display: block" %>
-    <%= form.date_field :completed_date %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

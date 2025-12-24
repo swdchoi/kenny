@@ -1,11 +1,103 @@
-<p style="color: green"><%= notice %></p>
+<div class="container my-5">
 
-<%= render @contract %>
+  <!-- Flash notice -->
+  <% if notice.present? %>
+    <div class="alert alert-success">
+      <%= notice %>
+    </div>
+  <% end %>
 
-<div>
-  <%= link_to "Edit this contract", edit_contract_path(@contract, client_id: @contract.client.id) %> |
-  <%= button_to "Destroy this contract", contract_path(@contract), method: :delete, data: {turbo: false} %>
+  <!-- CONTRACT CARD -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h3 class="card-title mb-1">
+            <%= @contract.title %>
+          </h3>
+          <p class="text-muted mb-0">
+            Client: <strong><%= @contract.client.company_name %></strong>
+          </p>
+        </div>
+
+        <span class="badge bg-primary">
+          <%= @contract.status if @contract.respond_to?(:status) %>
+        </span>
+      </div>
+
+      <hr>
+
+      <p class="mb-3">
+        <%= simple_format(@contract.description) %>
+      </p>
+
+      <div class="row text-muted">
+        <div class="col-md-4">
+          <strong>Start Date</strong><br>
+          <%= @contract.start_date %>
+        </div>
+        <div class="col-md-4">
+          <strong>End Date</strong><br>
+          <%= @contract.end_date %>
+        </div>
+        <div class="col-md-4">
+          <strong>Total Amount</strong><br>
+          $<%= number_with_precision(@contract.total_amount, precision: 2) %>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="card-footer bg-light d-flex justify-content-between">
+      <%= link_to "← Back to Contracts",
+          client_contracts_path(client_id: @contract.client_id),
+          class: "btn btn-link text-decoration-none" %>
+
+      <div>
+        <%= link_to "Edit",
+            edit_contract_path(@contract),
+            class: "btn btn-outline-primary me-2" %>
+
+        <%= button_to "Delete",
+            contract_path(@contract),
+            method: :delete,
+            data: { confirm: "Are you sure?" },
+            form: { class: "d-inline" },
+            class: "btn btn-outline-danger" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- MILESTONES -->
+  <div class="card shadow-sm mb-4">
+  <div class="d-flex bg-white fw-semibold card-header justify-content-between align-items-center mb-3">
+    <h6 class="mb-0 fw-semibold">Milestones</h6>
+
+    <%= link_to "New milestone",
+        new_contract_milestone_path(@contract),
+        class: "btn btn-sm btn-outline-primary" %>
+  </div>
+
+    <div class="card-body p-0">
+      <%= render "milestones/index", milestones: @contract.milestones %>
+    </div>
+  </div>
+
+  <!-- PAYMENT TERMS -->
+  <div class="card shadow-sm">
+        <!-- Header -->
+  <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center mb-3">
+    <h6 class="mb-0 fw-semibold">Payment Terms</h6>
+
+    <%= link_to "New payment term",
+        new_contract_payment_term_path(@contract),
+        class: "btn btn-sm btn-outline-primary" %>
+  </div>
+
+    <div class="card-body p-0">
+      <%= render "payment_terms/index", payment_terms: @contract.payment_terms %>
+    </div>
+  </div>
+
 </div>
-
-<%= link_to "Payment Terms", contract_payment_terms_path(@contract)%>
-<%= link_to "Milestones", contract_milestones_path(@contract)%>

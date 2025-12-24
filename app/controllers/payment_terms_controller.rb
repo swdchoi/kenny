@@ -15,17 +15,30 @@ class PaymentTermsController < ApplicationController
   def new
     @contract = Contract.find(params[:contract_id])
     @payment_term = @contract.payment_terms.build
+    @milestones = @contract.milestones
+    if @contract.payment_terms.first
+      @payment_planned = @contract.payment_terms.sum(:amount)
+    end
   end
 
   # GET /payment_terms/1/edit
   def edit
     @contract = Contract.find(params[:contract_id])
+    @milestones = @contract.milestones
+    if @contract.payment_terms.first
+      @payment_planned = @contract.payment_terms.sum(:amount)
+    end
   end
 
   # POST /payment_terms or /payment_terms.json
   def create
     @contract = Contract.find(params[:contract_id])
     @payment_term = @contract.payment_terms.build(payment_term_params)
+
+    if @payment_term.milestone.present?
+      @payment_term.target_date = @payment_term.milestone.date
+      @payment_term.description = "When #{@payment_term.milestone.name} Complete!"
+    end
 
     respond_to do |format|
       if @payment_term.save
@@ -69,6 +82,6 @@ class PaymentTermsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def payment_term_params
-      params.expect(payment_term: [ :contract_id_id, :description, :percentage, :amount, :target_date, :status, :completed_date ])
+      params.expect(payment_term: [ :contract_id, :description, :percentage, :amount, :target_date, :status, :completed_date, :milestone_id ])
     end
 end

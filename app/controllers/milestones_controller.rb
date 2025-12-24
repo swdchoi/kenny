@@ -19,7 +19,6 @@ class MilestonesController < ApplicationController
 
   # GET /milestones/1/edit
   def edit
-     @contract = Contract.find(params[:contract_id])
   end
 
   # POST /milestones or /milestones.json
@@ -42,8 +41,8 @@ class MilestonesController < ApplicationController
   def update
     respond_to do |format|
       if @milestone.update(milestone_params)
-        format.html { redirect_to @milestone, notice: "Milestone was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @milestone }
+        format.turbo_stream
+        format.html { redirect_back(fallback_location: request.referer) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @milestone.errors, status: :unprocessable_entity }
@@ -69,6 +68,6 @@ class MilestonesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def milestone_params
-      params.expect(milestone: [ :name, :date, :status, :contract_id_id ])
+      params.expect(milestone: [ :name, :date, :status, :contract_id, :description, :completed_date ])
     end
 end

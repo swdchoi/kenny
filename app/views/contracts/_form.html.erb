@@ -1,42 +1,87 @@
-<%= form_with(model: contract, url: contract.persisted? ? nil : client_contracts_path(@client)) do |form| %>
-  <% if contract.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
 
-      <ul>
-        <% contract.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <h4 class="card-title mb-4">
+            <%= contract.persisted? ? "Edit Contract" : "New Contract" %>
+          </h4>
+
+          <%= form_with(
+                model: contract,
+                url: contract.persisted? ? nil : client_contracts_path(@client),
+                local: true
+              ) do |form| %>
+
+            <% if contract.errors.any? %>
+              <div class="alert alert-danger">
+                <h6 class="mb-2">
+                  <%= pluralize(contract.errors.count, "error") %> prevented this contract from being saved:
+                </h6>
+                <ul class="mb-0">
+                  <% contract.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- Title -->
+            <div class="mb-3">
+              <%= form.label :title, class: "form-label" %>
+              <%= form.text_field :title, class: "form-control" %>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <%= form.label :deliverables, class: "form-label" %>
+              <%= form.textarea :description, rows: 4, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :status, class: "form-label" %>
+              <%= form.select :status,
+                  Contract.statuses.keys.map { |s| [s.titleize, s] },
+                  {},
+                  class: "form-select"
+              %>
+            </div>
+
+            <!-- Dates -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <%= form.label :start_date, class: "form-label" %>
+                <%= form.date_field :start_date, class: "form-control" %>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :end_date, class: "form-label" %>
+                <%= form.date_field :end_date, class: "form-control" %>
+              </div>
+            </div>
+
+            <!-- Amount -->
+            <div class="mb-4">
+              <%= form.label :total_amount, "Total Contract Amount", class: "form-label" %>
+              <%= form.number_field :total_amount, step: 0.01, class: "form-control" %>
+            </div>
+
+     
+            <!-- Actions -->
+            <div class="d-flex justify-content-end gap-2">
+              <%= form.submit(
+                    contract.persisted? ? "Update Contract" : "Create Contract",
+                    class: "btn btn-primary px-4"
+                  ) %>
+            </div>
+
+          <% end %>
+
+        </div>
+      </div>
+
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
   </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description %>
-  </div>
-
-  <div>
-    <%= form.label :start_date, style: "display: block" %>
-    <%= form.date_field :start_date %>
-  </div>
-
-  <div>
-    <%= form.label :end_date, style: "display: block" %>
-    <%= form.date_field :end_date %>
-  </div>
-
-  <div>
-    <%= form.label :total_amount, style: "display: block" %>
-    <%= form.text_field :total_amount %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

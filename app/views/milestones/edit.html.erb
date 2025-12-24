@@ -8,5 +8,5 @@
 
 <div>
   <%= link_to "Show this milestone", @milestone %> |
-  <%= link_to "Back to milestones", milestones_path %>
+  <%= link_to "Back to milestones", contract_milestones_path(contract_id: @milestone.contract.id) %>
 </div>

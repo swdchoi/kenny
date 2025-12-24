@@ -4,6 +4,6 @@
 
 <div>
   <%= link_to "Edit this milestone", edit_milestone_path(@milestone) %> |
-
+  <%= link_to "back", contract_milestones_path(contract_id: @milestone.contract.id)%>
   <%= button_to "Destroy this milestone", @milestone, method: :delete %>
 </div>

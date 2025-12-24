@@ -4,12 +4,17 @@ class Invoice < ApplicationRecord
   validates :issue_date, presence: true
   validates :due_date, presence: true
 
-  enum :status, {
-    draft: 0,
-    issued: 1,
-    paid: 2,
-    overdue: 3
-  }
+  def derived_status
+    return "paid" if paid_date.present?
+
+    if issue_date.present?
+      return "overdue" if due_date.present? && due_date < Date.current
+      return "issued"
+    end
+
+    "draft"
+  end
+
 
   scope :this_month, -> {
     where("issue_date >= ?", Date.current.beginning_of_month)

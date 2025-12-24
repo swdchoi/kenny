@@ -25,6 +25,12 @@ end
     # Reveal healt h status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
     # Can be used by load balancers and uptime monitors to verify that the app is live.
     get "up" => "rails/health#show", as: :rails_health_check
+    get "invoicesdash", to: "dashboard#invoice", as: "invoicedash"
+    get "contractsdash", to: "dashboard#contracts", as: "contractdash"
+    get "clientdash", to: "dashboard#clients", as: "clientdash"
+    get "paymentdash", to: "dashboard#paymentterms", as: "paymentdash"
+    get "milestonesdash", to: "dashboard#milestones", as: "milestonedash"
+    get "invoiceanalysis", to: "invoices#analysis", as: "invoiceanalysis"
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

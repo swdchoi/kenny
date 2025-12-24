@@ -1,7 +1,42 @@
-<% @clients.each do |client| %>
-<p><%= client.email %></p>
-<%= link_to "Show", client_path(client) %>
-<% end %>
+<div class="container p-3">
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h4 mb-0">Clients</h1>
 
+  <%= link_to "New client",
+    new_client_path,
+    class: "btn btn-primary btn-sm" %>
+</div>
 
-<%= link_to "New client", new_client_path %>
+<div class="row g-3">
+  <% @clients.each do |client| %>
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex flex-column">
+
+          <h5 class="card-title mb-1">
+            <%= client.company_name %>
+          </h5>
+
+          <p class="text-muted small mb-3">
+            <%= client.email %>
+          </p>
+
+          <div class="d-flex justify-content-between small mb-4">
+            <div>
+              <strong><%= client.contracts.count %></strong><br>
+              <span class="text-muted">Contracts</span>
+            </div>
+          </div>
+
+          <div class="mt-auto">
+            <%= link_to "View client",
+              client_path(client),
+              class: "btn btn-outline-primary btn-sm w-100" %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+</div>
