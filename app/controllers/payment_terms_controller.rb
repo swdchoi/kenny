@@ -42,7 +42,7 @@ class PaymentTermsController < ApplicationController
 
     respond_to do |format|
       if @payment_term.save
-        format.html { redirect_to @payment_term, notice: "Payment term was successfully created." }
+        format.html { redirect_to contract_path(@contract), notice: "Payment term was successfully created." }
         format.json { render :show, status: :created, location: @payment_term }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -55,7 +55,7 @@ class PaymentTermsController < ApplicationController
   def update
     respond_to do |format|
       if @payment_term.update(payment_term_params)
-        format.html { redirect_to @payment_term, notice: "Payment term was successfully updated.", status: :see_other }
+        format.html { redirect_to contract_path(@payment_term.contract), notice: "Payment term was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @payment_term }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -69,7 +69,7 @@ class PaymentTermsController < ApplicationController
     @payment_term.destroy!
 
     respond_to do |format|
-      format.html { redirect_to payment_terms_path, notice: "Payment term was successfully destroyed.", status: :see_other }
+      format.html { redirect_to contract_path(@payment_term.contract), notice: "Payment term was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,7 @@
+<%= turbo_stream.append "#{@invoice.id}_notes_container" do %>
+<%= render @note %>
+<% end %>
+
+<%= turbo_stream.replace "new_note_#{@invoice.id}" do %>
+  <%= turbo_frame_tag "new_note_#{@invoice.id}" %>
+<% end %>

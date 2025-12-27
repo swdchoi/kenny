@@ -1,11 +1,96 @@
-<p style="color: green"><%= notice %></p>
+<p class="text-success"><%= notice %></p>
 
-<%= render @client %>
+<div class="container my-4">
+  <!-- Client header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">
+      <%= @client.company_name.presence || @client.email %>
+    </h3>
 
-<%= link_to "contracts", client_contracts_path(@client) %>
-<div>
-  <%= link_to "Edit this client", edit_client_path(@client) %> |
-  <%= link_to "Back to clients", clients_path %>
+    <div>
+      <%= link_to "Edit", edit_client_path(@client), class: "btn btn-outline-primary btn-sm" %>
+      <%= link_to "Back", clients_path, class: "btn btn-outline-secondary btn-sm" %>
+      <%= button_to "Delete",
+            @client,
+            method: :delete,
+            data: { confirm: "Are you sure?" },
+            class: "btn btn-outline-danger btn-sm d-inline" %>
+    </div>
+  </div>
 
-  <%= button_to "Destroy this client", @client, method: :delete %>
+  <!-- Client info cards -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <small class="text-muted">Email</small>
+          <p class="fw-semibold mb-0"><%= @client.email %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <small class="text-muted">Company</small>
+          <p class="fw-semibold mb-0">
+            <%= @client.company_name.presence || "-" %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <small class="text-muted">Phone</small>
+          <p class="fw-semibold mb-0">
+            <%= @client.phone.presence || "-" %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contracts -->
+  <div class="mb-4">
+    <h5 class="fw-bold mb-3">Contracts</h5>
+    <%= link_to "new", new_contract_path(@client) %>
+    <% if @client.contracts.any? %>
+      <div class="row g-3">
+        <% @client.contracts.each do |contract| %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100">
+              <div class="card-body d-flex flex-column">
+                <h6 class="fw-semibold mb-1">
+                  Contract #<%= contract.id %>
+                </h6>
+
+                <small class="text-muted mb-2">
+                  <%= contract.start_date %> → <%= contract.end_date %>
+                </small>
+
+                <p class="mb-3">
+                  <strong>Status:</strong>
+                  <span class="badge bg-<%= contract.active? ? "success" : "secondary" %>">
+                    <%= contract.status.titleize %>
+                  </span>
+                </p>
+
+                <div class="mt-auto">
+                  <%= link_to "View contract",
+                        contract_path(contract),
+                        class: "btn btn-primary btn-sm w-100" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="alert alert-light text-muted">
+        No contracts yet for this client.
+      </div>
+    <% end %>
+  </div>
 </div>

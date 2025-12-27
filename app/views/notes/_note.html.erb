@@ -1,0 +1,25 @@
+  <%= turbo_frame_tag "edit_note_#{note.id}", class: "card mb-2 border-0 bg-light" do %>
+                <div class="card-body py-2">
+                  <p class="mb-1"><%= note.content %></p>
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                      <%= note.user.email %> · <%= time_ago_in_words(note.created_at) %> ago
+                    </small>
+
+                    <div class="d-flex gap-2">
+                      <%= link_to "Edit",
+                            edit_note_path(note),
+                            data: { turbo_frame: "edit_note_#{note.id}" },
+                            class: "btn btn-sm btn-outline-warning" %>
+
+                      <%= button_to "Delete",
+                            note,
+                            method: :delete,
+                            data: { confirm: "Delete note?" },
+                            form: { class: "d-inline" },
+                            class: "btn btn-sm btn-outline-danger" %>
+                    </div>
+                  </div>
+                </div>
+<% end %>

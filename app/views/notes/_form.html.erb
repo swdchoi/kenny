@@ -1,0 +1,37 @@
+<%= form_with(
+      model: note,
+      url: note.persisted? ? nil : invoice_notes_path(@invoice),
+      class: "card shadow-sm"
+    ) do |form| %>
+
+  <div class="card-body">
+    <% if note.errors.any? %>
+      <div class="alert alert-danger py-2">
+        <strong>
+          <%= pluralize(note.errors.count, "error") %> prevented this note from saving
+        </strong>
+        <ul class="mb-0 mt-1">
+          <% note.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :content, "Comment", class: "form-label fw-semibold" %>
+      <%= form.text_area :content,
+            rows: 3,
+            class: "form-control",
+            placeholder: "Write a note…" %>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <%= form.submit(
+            note.persisted? ? "Update note" : "Add note",
+            class: "btn btn-primary btn-sm"
+          ) %>
+    </div>
+  </div>
+
+<% end %>

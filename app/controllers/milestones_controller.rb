@@ -28,7 +28,7 @@ class MilestonesController < ApplicationController
 
     respond_to do |format|
       if @milestone.save
-        format.html { redirect_to @milestone, notice: "Milestone was successfully created." }
+        format.html { redirect_to contract_path(@contract), notice: "Milestone was successfully created." }
         format.json { render :show, status: :created, location: @milestone }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -42,7 +42,7 @@ class MilestonesController < ApplicationController
     respond_to do |format|
       if @milestone.update(milestone_params)
         format.turbo_stream
-        format.html { redirect_back(fallback_location: request.referer) }
+        format.html { contract_path(@milestone.contract) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @milestone.errors, status: :unprocessable_entity }
@@ -55,7 +55,7 @@ class MilestonesController < ApplicationController
     @milestone.destroy!
 
     respond_to do |format|
-      format.html { redirect_to milestones_path, notice: "Milestone was successfully destroyed.", status: :see_other }
+      format.html { redirect_back(fallback_location: request.referer, notice: "Milestone was successfully destroyed.", status: :see_other) }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,9 @@
+<% content_for :title, "New note" %>
+
+<h1>New note</h1>
+
+<%= turbo_frame_tag "new_note_#{@note.invoice.id}" do %>
+<%= render "form", note: @note %>
+<% end %>
+
+<br>

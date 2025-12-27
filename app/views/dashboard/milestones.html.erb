@@ -1,53 +1,200 @@
-
 <div class="container-fluid">
 
-  <!-- List -->
-  <% if @milestones.any? %>
-    <div class="list-group list-group-flush">
-      <% @milestones.each do |milestone| %>
+  <div class="row g-3 mb-4">
 
-        <div class="list-group-item py-3">
-          <div class="d-flex justify-content-between align-items-center">
+  <!-- OVERDUE COUNT -->
+  <div class="col-md-4">
+    <a href="#overdue" class="text-decoration-none">
+      <div class="card shadow-sm border-danger border-1 h-100">
+        <div class="card-body">
+          <small class="text-muted text-uppercase">Overdue</small>
+          <h2 class="fw-bold text-danger mb-1">
+            <%= @milestones_overdue.count %>
+          </h2>
+          <small class="text-muted">
+            Needs immediate attention
+          </small>
+        </div>
+      </div>
+    </a>
+  </div>
 
-            <div>
-              <div class="fw-semibold">
-                <%= milestone.name %>
-              </div>
+  <!-- UPCOMING COUNT -->
+  <div class="col-md-4">
+    <a href="#upcoming" class="text-decoration-none">
+      <div class="card shadow-sm border-warning border-1 h-100">
+        <div class="card-body">
+          <small class="text-muted text-uppercase">Upcoming</small>
+          <h2 class="fw-bold text-warning mb-1">
+            <%= @milestones_upcoming.count %>
+          </h2>
+          <small class="text-muted">
+            Due soon
+          </small>
+        </div>
+      </div>
+    </a>
+  </div>
 
-              <small class="text-muted">
-                Target date: <%= milestone.date %>
-              </small>
-            </div>
+  <!-- COMPLETED COUNT -->
+  <div class="col-md-4">
+    <div class="card shadow-sm border-success border-1 h-100">
+      <div class="card-body">
+        <small class="text-muted text-uppercase">Completed</small>
+        <h2 class="fw-bold text-success mb-1">
+          <%= @milestones_finished.count %>
+        </h2>
+        <small class="text-muted">
+          Finished milestones
+        </small>
+      </div>
+    </div>
+  </div>
 
-            <div class="d-flex align-items-center gap-2">
-             <div>
-  <% if milestone.completed? %>
-    <span class="badge rounded-pill bg-success">Completed</span>
-  <% else %>
-    <span class="badge rounded-pill bg-secondary">Pending</span>
-  <% end %>
 </div>
 
-              <%= link_to "Edit",
-                  edit_milestone_path(milestone),
-                  class: "btn btn-sm btn-outline-secondary" %>
+  <!-- OVERDUE -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <h6 id="overdue" class="fw-bold text-danger mb-0">⚠️ Overdue Milestones</h6>
+        <small class="text-muted">Requires immediate attention</small>
+      </div>
+    </div>
 
-              <%= button_to "Delete",
-                  milestone_path(milestone),
-                  method: :delete,
-                  data: { confirm: "Are you sure?" },
-                  form: { class: "d-inline" },
-                  class: "btn btn-sm btn-outline-danger" %>
+    <div class="list-group list-group-flush">
+      <% if @milestones_overdue.any? %>
+        <% @milestones_overdue.each do |milestone| %>
+          <div class="list-group-item py-3 border-start">
+            <div class="d-flex justify-content-between align-items-start">
+
+              <div>
+                <div class="fw-semibold"><%= milestone.name %></div>
+
+                <small class="text-muted d-block">
+                  Client: <%= milestone.contract.client.company_name %>
+                </small>
+
+                <small class="text-muted">
+                  Due <%= milestone.date.strftime("%d %b %Y") %>
+                </small>
+              </div>
+
+              <div class="text-end">
+                <span class="badge bg-danger mb-2">Overdue</span>
+
+                <div class="d-flex gap-1">
+                  <%= link_to "Edit",
+                      edit_milestone_path(milestone),
+                      class: "btn btn-sm btn-outline-secondary" %>
+
+                  <%= button_to "Delete",
+                      milestone_path(milestone),
+                      method: :delete,
+                      data: { confirm: "Are you sure?" },
+                      form: { class: "d-inline" },
+                      class: "btn btn-sm btn-outline-danger" %>
+                </div>
+              </div>
+
             </div>
           </div>
-        </div>
-
+        <% end %>
+      <% else %>
+        <div class="p-3 text-muted small">No overdue milestones 🎉</div>
       <% end %>
     </div>
-  <% else %>
-    <p class="text-muted text-center py-4">
-      No milestones added yet.
-    </p>
-  <% end %>
+  </div>
+
+  <!-- UPCOMING -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <h6 class="fw-bold text-warning mb-0" id="upcoming">⏳ Upcoming Milestones</h6>
+        <small class="text-muted">Due soon</small>
+      </div>
+    </div>
+
+    <div class="list-group list-group-flush">
+      <% if @milestones_upcoming.any? %>
+        <% @milestones_upcoming.each do |milestone| %>
+          <div class="list-group-item py-3 border-start ">
+            <div class="d-flex justify-content-between align-items-start">
+
+              <div>
+                <div class="fw-semibold"><%= milestone.name %></div>
+
+                <small class="text-muted d-block">
+                  Client: <%= milestone.contract.client.company_name %>
+                </small>
+
+                <small class="text-muted">
+                  Due <%= milestone.date.strftime("%d %b %Y") %>
+                </small>
+              </div>
+
+              <div class="text-end">
+                <span class="badge bg-warning text-dark mb-2">Upcoming</span>
+
+                <div class="d-flex gap-1">
+                  <%= link_to "Edit",
+                      edit_milestone_path(milestone),
+                      class: "btn btn-sm btn-outline-secondary" %>
+
+                  <%= button_to "Delete",
+                      milestone_path(milestone),
+                      method: :delete,
+                      data: { confirm: "Are you sure?" },
+                      form: { class: "d-inline" },
+                      class: "btn btn-sm btn-outline-danger" %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="p-3 text-muted small">No upcoming milestones</div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- COMPLETED / CANCELLED -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+      <h6 class="fw-bold text-success mb-0" id="completed">✅ Completed / Cancelled</h6>
+    </div>
+
+    <div class="list-group list-group-flush">
+      <% if @milestones_finished.any? %>
+        <% @milestones_finished.each do |milestone| %>
+          <div class="list-group-item py-3 bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+
+              <div>
+                <div class="fw-semibold"><%= milestone.name %></div>
+
+                <small class="text-muted d-block">
+                  Client: <%= milestone.contract.client.company_name %>
+                </small>
+
+                <small class="text-muted">
+                  <%= milestone.status.titleize %> on
+                  <%= milestone.date.strftime("%d %b %Y") %>
+                </small>
+              </div>
+
+              <span class="badge bg-success">
+                <%= milestone.status.titleize %>
+              </span>
+
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="p-3 text-muted small">No completed milestones yet</div>
+      <% end %>
+    </div>
+  </div>
 
 </div>

@@ -7,6 +7,26 @@ class PaymentTerm < ApplicationRecord
   validates :percentage, presence: true
   validates :target_date, presence: true
 
+
+  scope :upcoming, -> {
+  where(status: :pending)
+    .where("target_date >= ?", Date.today)
+    }
+
+  scope :overdue, -> {
+    where(status: :pending)
+      .where("target_date < ?", Date.today)
+  }
+
+  scope :done, -> {
+      where(status: :completed)
+    }
+
+
+  scope :invoiced, -> {
+    where(status: :invoiced)
+  }
+
   enum :status, {
   pending: 0,        # milestone not completed yet
   due: 1,            # milestone completed → payment unlocked
@@ -14,9 +34,9 @@ class PaymentTerm < ApplicationRecord
   completed: 3       # invoice paid
 }
 
-  scope :upcoming, -> {
-    where(status: :pending)
-      .where("target_date <= ?", 3.months.from_now)
-      .order(:target_date)
-  }
+  scope :need_issue, -> {
+  left_joins(:invoice)
+    .where(status: :due)
+    .where(invoices: { id: nil })
+}
 end

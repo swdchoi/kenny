@@ -10,6 +10,14 @@ class Milestone < ApplicationRecord
   cancelled: "cancelled"
   }
 
+  scope :pending, -> { where(completed_date: nil) }
+  scope :upcoming, -> { pending.where("date >= ?", Date.today) }
+  scope :overdue,  -> { pending.where("date < ?", Date.today) }
+
+scope :finished, -> {
+  where(status: [ :completed, :cancelled ])
+}
+
   private
 
   def unlock_payment_term

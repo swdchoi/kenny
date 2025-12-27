@@ -1,11 +1,5 @@
 <% content_for :title, "New payment term" %>
 
-<h1>New payment term</h1>
 
 <%= render "form", contract: @contract, payment_term: @payment_term %>
 
-<br>
-
-<div>
-  <%= link_to "Back to payment terms", payment_terms_path %>
-</div>

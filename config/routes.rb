@@ -7,7 +7,9 @@ resources :clients do
 end
 
 resources :payment_terms do
-  resources :invoices, shallow: true
+  resources :invoices, shallow: true do
+  resources :notes, shallow: true
+  end
 end
 
   devise_for :users

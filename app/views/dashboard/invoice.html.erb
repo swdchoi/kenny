@@ -1,37 +1,182 @@
-<div class="container p-3">
-<% @invoices.each do |invoice| %>
-  <% status = invoice.derived_status %>
+<div class="container my-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <!-- Status -->
-    <div>
-      <span class="badge rounded-pill bg-<%= {
-        "draft"   => "secondary",
-        "issued"  => "warning",
-        "paid"    => "success",
-        "overdue" => "danger"
-      }[status] %>">
-        <%= status.titleize %>
-      </span>
-
-      <small class="text-muted ms-2">
-        Due <%= invoice.due_date %>
-      </small>
+  <!-- KPI Row -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Issued</div>
+          <div class="fs-4 fw-semibold">
+            $<%= number_with_precision(@money_issued, precision: 2) %>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Actions -->
-    <div class="d-flex gap-2">
-      <%= link_to "Edit Invoice",
-          edit_invoice_path(invoice),
-          class: "btn btn-sm btn-outline-secondary" %>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Collected</div>
+          <div class="fs-4 fw-semibold text-success">
+            $<%= number_with_precision(@money_collected, precision: 2) %>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <%= button_to "Delete Invoice",
-          invoice_path(invoice),
-          method: :delete,
-          data: { confirm: "Delete invoice?" },
-          form: { class: "d-inline" },
-          class: "btn btn-sm btn-outline-danger" %>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Outstanding</div>
+          <div class="fs-4 fw-semibold text-danger">
+            $<%= number_with_precision(@money_outstanding, precision: 2) %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-<% end %>
+
+  <% sections = [
+    ["Late", @invoices_late, "late"],
+    ["Outstanding", @invoices_outstanding, "outstanding"],
+    ["Issued", @invoices_issued, "issued"],
+    ["Collected", @invoices_collected, "collected"]
+  ] %>
+
+  <% sections.each do |title, invoices, anchor| %>
+    <% next if invoices.blank? %>
+
+    <h5 class="mt-5 mb-3 fw-semibold" id= <%= anchor %> ><%= title %></h5>
+
+    <% invoices.each do |invoice| %>
+      <% status = invoice.derived_status %>
+
+      <div class="card shadow-sm mb-4">
+        <!-- Header -->
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge rounded-pill bg-<%= {
+              "draft"   => "secondary",
+              "issued"  => "warning",
+              "paid"    => "success",
+              "overdue" => "danger"
+            }[status] %>">
+              <%= status.titleize %>
+            </span>
+
+            <small class="text-muted">
+              ($<%= invoice.payment_term.amount %>)
+            </small>
+
+            <small class="text-muted">
+              Due <%= invoice.due_date %>
+            </small>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= link_to "Edit",
+                  edit_invoice_path(invoice),
+                  class: "btn btn-sm btn-outline-secondary" %>
+
+            <%= button_to "Delete",
+                  invoice_path(invoice),
+                  method: :delete,
+                  data: { confirm: "Delete invoice?" },
+                  form: { class: "d-inline" },
+                  class: "btn btn-sm btn-outline-danger" %>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Notes header -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+  <h6 class="fw-semibold mb-0">Notes</h6>
+
+  <div class="d-flex gap-2">
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary"
+      data-notes-toggle
+      data-invoice-id="<%= invoice.id %>">
+      Show notes
+    </button>
+
+    <%= link_to "Add note",
+          new_invoice_note_path(invoice),
+          class: "btn btn-sm btn-outline-primary",
+          data: { turbo_frame: "new_note_#{invoice.id}" } %>
+  </div>
 </div>
+
+          <!-- Notes -->
+          <div id="<%= invoice.id %>_notes_container" class="d-none">
+            <% if invoice.notes.any? %>
+              <% invoice.notes.each do |note| %>
+                <%= turbo_frame_tag "edit_note_#{note.id}", class: "card mb-2 border-0 bg-light" do %>
+                  <div class="card-body py-2">
+                    <p class="mb-1"><%= note.content %></p>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                      <small class="text-muted">
+                        <%= note.user.email %> · <%= time_ago_in_words(note.created_at) %> ago
+                      </small>
+
+                      <div class="d-flex gap-2">
+                        <%= link_to "✏️",
+                              edit_note_path(note),
+                              data: { turbo_frame: "edit_note_#{note.id}" },
+                              class: "btn btn-sm btn-warning" %>
+
+                        <%= button_to "🗑️",
+                              note,
+                              method: :delete,
+                              data: { confirm: "Delete note?" },
+                              form: { class: "d-inline" },
+                              class: "btn btn-sm btn-danger" %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            <% else %>
+              <div class="text-muted small">
+                No notes yet for this invoice.
+              </div>
+            <% end %>
+          </div>
+
+          <!-- New note -->
+          <div class="mt-3">
+            <%= turbo_frame_tag "new_note_#{invoice.id}" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if sections.all? { |_, list| list.blank? } %>
+    <p class="text-muted text-center py-5">
+      No invoices yet.
+    </p>
+  <% end %>
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("[data-notes-toggle]").forEach(button => {
+    button.addEventListener("click", () => {
+      const invoiceId = button.dataset.invoiceId
+      const notes = document.getElementById(`${invoiceId}_notes_container`)
+
+      if (!notes) return
+
+      notes.classList.toggle("d-none")
+
+      button.textContent = notes.classList.contains("d-none")
+        ? "Show notes"
+        : "Hide notes"
+    })
+  })
+})
+</script>

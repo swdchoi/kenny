@@ -1,0 +1,170 @@
+<div class="container-fluid">
+
+  <!-- PAGE TITLE -->
+  <div class="mb-4">
+    <h4 class="fw-bold">Dashboard</h4>
+    <p class="text-muted mb-0">
+      Overview of contracts, invoicing, and upcoming actions
+    </p>
+  </div>
+
+  <!-- BUSINESS OVERVIEW -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <small class="text-muted">Clients</small>
+          <h3 class="mb-1"><%= @client_count %></h3>
+          <%= link_to "View clients →", clients_path, class: "small text-decoration-none" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <small class="text-muted">Active Contracts</small>
+          <h3 class="mb-1"><%= @contract_count %></h3>
+          <%= link_to "View contracts →", contractdash_path, class: "small text-decoration-none" %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+        calendarVIEW
+        <form get url back to root_path>
+            <start date>
+            <end date>
+        </form>
+        
+    </div>
+  </div>
+
+  <!-- FINANCIAL PERFORMANCE -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">Invoice Performance</h6>
+        <%= link_to "View invoices →", invoicedash_path, class: "small text-decoration-none" %>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-md-3">
+          <small class="text-muted">Issued</small>
+          <h5 class="mb-0"><%= number_to_currency(@money_issued) %></h5>
+          <small class="text-muted"><%= @invoices_issued.count %> invoices</small>
+        </div>
+
+        <div class="col-md-3">
+          <small class="text-muted">Collected</small>
+          <h5 class="mb-0 text-success">
+            <%= number_to_currency(@money_collected) %>
+          </h5>
+          <small class="text-muted"><%= @invoices_collected.count %> invoices</small>
+        </div>
+
+        <div class="col-md-3">
+          <small class="text-muted">Outstanding</small>
+          <h5 class="mb-0 text-warning">
+            <%= number_to_currency(@money_outstanding) %>
+          </h5>
+          <small class="text-muted"><%= @invoices_outstanding.count %> invoices</small>
+        </div>
+
+        <div class="col-md-3">
+          <small class="text-muted">Late</small>
+          <h5 class="mb-0 text-danger">
+            <%= number_to_currency(
+              @invoices_late
+                .joins(:payment_term)
+                .sum("payment_terms.amount")
+            ) %>
+          </h5>
+          <small class="text-muted"><%= @invoices_late.count %> invoices</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTENTION REQUIRED -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-warning shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-warning mb-1">⚠️ Invoices to Issue</h6>
+          <p class="text-muted small mb-2">
+            Payment terms that are due but not invoiced
+          </p>
+          <h4 class="mb-2"><%= @payment_terms_need_issue.count %></h4>
+          <%= link_to "Review →",
+              paymentdash_path(anchor: "needs-invoice"),
+              class: "small text-decoration-none" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-danger shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-danger mb-1">🚨 Overdue Payment Terms</h6>
+          <p class="text-muted small mb-2">
+            Expected payments past target date
+          </p>
+          <h4 class="mb-2"><%= @payment_terms_overdue.count %></h4>
+          <%= link_to "View overdue →",
+              paymentdash_path(anchor: "overdue"),
+              class: "small text-decoration-none" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-danger shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-danger mb-1">🚨 Overdue Milestones</h6>
+          <p class="text-muted small mb-2">
+            Project milestones behind schedule
+          </p>
+          <h4 class="mb-2"><%= @milestones_overdue.count %></h4>
+          <%= link_to "View milestones →",
+              milestonedash_path(anchor: "overdue"),
+              class: "small text-decoration-none" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPCOMING -->
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-1">⏳ Upcoming Milestones</h6>
+          <p class="text-muted small mb-2">
+            Delivery targets coming up
+          </p>
+          <h5 class="mb-2"><%= @milestones_upcoming.count %></h5>
+          <%= link_to "View →",
+              milestonedash_path(anchor: "upcoming"),
+              class: "btn btn-sm btn-outline-primary" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-1">⏳ Upcoming Payment Terms</h6>
+          <p class="text-muted small mb-2">
+            Expected invoicing in near future
+          </p>
+          <h5 class="mb-2"><%= @payment_terms_upcoming.count %></h5>
+          <%= link_to "View →",
+              paymentdash_path(anchor: "upcoming"),
+              class: "btn btn-sm btn-outline-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

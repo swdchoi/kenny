@@ -19,7 +19,8 @@ class ContractsController < ApplicationController
   # GET /contracts/new
   def new
     @client = Client.find(params[:client_id])
-    @contract =  @client.contracts.build
+    @clients = Client.all
+    @contract = Contract.new(client_id: params[:client_id])
   end
 
   # GET /contracts/1/edit

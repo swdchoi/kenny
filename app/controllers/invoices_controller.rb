@@ -86,7 +86,7 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.save
-        format.html { redirect_to @invoice, notice: "Invoice was successfully created." }
+        format.html { redirect_to contract_path(@invoice.payment_term.contract), notice: "Invoice was successfully created." }
         format.json { render :show, status: :created, location: @invoice }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -99,7 +99,7 @@ class InvoicesController < ApplicationController
   def update
     respond_to do |format|
       if @invoice.update(invoice_params)
-        format.html { redirect_to @invoice, notice: "Invoice was successfully updated.", status: :see_other }
+        format.html { redirect_to contract_path(@invoice.payment_term.contract), notice: "Invoice was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @invoice }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -113,7 +113,7 @@ class InvoicesController < ApplicationController
     @invoice.destroy!
 
     respond_to do |format|
-      format.html { redirect_back(fallback_location: request.referer, notice: "Invoice was successfully destroyed.", status: :see_other) }
+      format.html { redirect_to contract_path(@invoice.payment_term.contract), notice: "Invoice was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
