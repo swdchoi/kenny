@@ -1,71 +1,83 @@
-<%= form_with(model: milestone , url: milestone.persisted? ? nil : contract_milestones_path(@contract)) do |form| %>
-  <% if milestone.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(milestone.errors.count, "error") %> prohibited this milestone from being saved:</h2>
-
-      <ul>
-        <% milestone.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-   <!-- Name -->
-  <div class="mb-3">
-    <%= form.label :name, class: "form-label" %>
-    <%= form.text_field :name, class: "form-control" %>
+<div class="card shadow-sm">
+  <div class="card-header bg-white">
+    <h5 class="mb-0 fw-semibold">
+      <%= milestone.persisted? ? "Edit Milestone" : "New Milestone" %>
+    </h5>
   </div>
 
-  <!-- Date -->
-  <div class="mb-3">
-    <%= form.label :date, "Due Date", class: "form-label" %>
-    <%= form.date_field :date, class: "form-control" %>
-  </div>
+  <div class="card-body">
+    <%= form_with(model: milestone, url: milestone.persisted? ? nil : contract_milestones_path(@contract)) do |form| %>
 
-  <!-- Description -->
-  <div class="mb-3">
-    <%= form.label :description, class: "form-label" %>
-    <%= form.text_area :description, rows: 3, class: "form-control" %>
-  </div>
+      <% if milestone.errors.any? %>
+        <div class="alert alert-danger">
+          <strong>
+            <%= pluralize(milestone.errors.count, "error") %> prevented this milestone from being saved:
+          </strong>
+          <ul class="mb-0 mt-2">
+            <% milestone.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <!-- Status toggle -->
-  <div class="mb-3">
-  <label class="form-label d-block">Status</label>
+      <!-- Name -->
+      <div class="mb-3">
+        <%= form.label :name, class: "form-label" %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
 
-  <div class="btn-group" role="group">
-    <%= form.radio_button :status, "pending",
-        class: "btn-check",
-        id: "milestone_#{milestone.id}_pending" %>
+      <!-- Due Date -->
+      <div class="mb-3">
+        <%= form.label :date, "Due Date", class: "form-label" %>
+        <%= form.date_field :date, class: "form-control" %>
+      </div>
 
-    <%= label_tag "milestone_#{milestone.id}_pending",
-        "Pending",
-        class: "btn btn-outline-secondary" %>
+      <!-- Description -->
+      <div class="mb-3">
+        <%= form.label :description, class: "form-label" %>
+        <%= form.text_area :description, rows: 3, class: "form-control" %>
+      </div>
 
-    <%= form.radio_button :status, "completed",
-        class: "btn-check",
-        id: "milestone_#{milestone.id}_completed" %>
+      <!-- Status -->
+      <div class="mb-4">
+        <label class="form-label d-block">Status</label>
 
-    <%= label_tag "milestone_#{milestone.id}_completed",
-        "Completed",
-        class: "btn btn-outline-success" %>
+        <div class="btn-group" role="group">
+          <%= form.radio_button :status, "pending",
+              class: "btn-check",
+              id: "milestone_#{milestone.id}_pending" %>
+          <%= label_tag "milestone_#{milestone.id}_pending",
+              "Pending",
+              class: "btn btn-outline-secondary" %>
 
-    <%= form.radio_button :status, "cancelled",
-        class: "btn-check",
-        id: "milestone_#{milestone.id}_cancelled" %>
+          <%= form.radio_button :status, "completed",
+              class: "btn-check",
+              id: "milestone_#{milestone.id}_completed" %>
+          <%= label_tag "milestone_#{milestone.id}_completed",
+              "Completed",
+              class: "btn btn-outline-success" %>
 
-    <%= label_tag "milestone_#{milestone.id}_cancelled",
-        "Cancelled",
-        class: "btn btn-outline-danger" %>
+          <%= form.radio_button :status, "cancelled",
+              class: "btn-check",
+              id: "milestone_#{milestone.id}_cancelled" %>
+          <%= label_tag "milestone_#{milestone.id}_cancelled",
+              "Cancelled",
+              class: "btn btn-outline-danger" %>
+        </div>
+      </div>
+
+      <% if milestone.persisted? %>
+        <div class="mb-3">
+          <%= form.label :completed_date, "Date Completed", class: "form-label" %>
+          <%= form.date_field :completed_date, class: "form-control" %>
+        </div>
+      <% end %>
+
+      <div class="d-flex justify-content-end">
+        <%= form.submit "Save Milestone", class: "btn btn-outline-primary" %>
+      </div>
+
+    <% end %>
   </div>
 </div>
-<% if milestone.persisted? %>
-   <!-- Date -->
-  <div class="mb-3">
-    <%= form.label :completed_date, "Date Completed", class: "form-label" %>
-    <%= form.date_field :completed_date, class: "form-control" %>
-  </div>
-<% end %>
-
-  <%= form.submit class: "btn btn-primary" %>
-<% end %>

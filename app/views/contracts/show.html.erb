@@ -1,12 +1,5 @@
 <div class="container my-5">
 
-  <!-- Flash notice -->
-  <% if notice.present? %>
-    <div class="alert alert-success">
-      <%= notice %>
-    </div>
-  <% end %>
-
   <!-- CONTRACT CARD -->
   <div class="card shadow-sm mb-4">
     <div class="card-body">
@@ -51,7 +44,7 @@
     <!-- ACTIONS -->
     <div class="card-footer bg-light d-flex justify-content-between">
       <%= link_to "← Back to Contracts",
-          client_contracts_path(client_id: @contract.client_id),
+          client_path(id: @contract.client_id),
           class: "btn btn-link text-decoration-none" %>
 
       <div>

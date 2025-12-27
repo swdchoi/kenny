@@ -123,10 +123,8 @@
                 <%= form.date_field :target_date, class: "form-control" %>
               </div>
             </div>
-            <% if payment_term.persisted? %>
-              <hr>
 
-              <!-- Status -->
+            <!-- Status -->
               <div class="mb-3">
                 <%= form.label :status, class: "form-label" %>
                 <%= form.select :status,
@@ -135,6 +133,9 @@
                     class: "form-select"
                 %>
               </div>
+              
+            <% if payment_term.persisted? %>
+              <hr>
 
               <!-- Completed date -->
               <div class="mb-3">

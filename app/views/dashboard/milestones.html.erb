@@ -72,7 +72,7 @@
                 <div class="fw-semibold"><%= milestone.name %></div>
 
                 <small class="text-muted d-block">
-                  Client: <%= milestone.contract.client.company_name %>
+                  Client: <%= milestone.contract.client.company_name %> <% if milestone.payment_term %> | $<%= milestone.payment_term.amount %> <% end %>
                 </small>
 
                 <small class="text-muted">
@@ -125,7 +125,7 @@
                 <div class="fw-semibold"><%= milestone.name %></div>
 
                 <small class="text-muted d-block">
-                  Client: <%= milestone.contract.client.company_name %>
+                  Client: <%= milestone.contract.client.company_name %> <% if milestone.payment_term %> | $<%= milestone.payment_term.amount %> <% end %>
                 </small>
 
                 <small class="text-muted">
@@ -175,7 +175,7 @@
                 <div class="fw-semibold"><%= milestone.name %></div>
 
                 <small class="text-muted d-block">
-                  Client: <%= milestone.contract.client.company_name %>
+                  Client: <%= milestone.contract.client.company_name %> <% if milestone.payment_term %> | $<%= milestone.payment_term.amount %> <% end %>
                 </small>
 
                 <small class="text-muted">

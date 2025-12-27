@@ -1,11 +1,4 @@
 <% content_for :title, "New invoice" %>
 
-<h1>New invoice</h1>
 
 <%= render "form", payment_term: @payment_term, invoice: @invoice %>
-
-<br>
-
-<div>
-  <%= link_to "Back to payment", payment_term_path(@payment_term) %>
-</div>

@@ -1,113 +1,120 @@
 <div class="container-fluid">
 
+  <!-- SUMMARY CARDS (UNCHANGED) -->
   <div class="row g-3 mb-4">
 
-  <!-- UPCOMING -->
-  <div class="col-md">
-    <a href="#upcoming" class="text-decoration-none">
-      <div class="card shadow-sm border-warning h-100">
-        <div class="card-body">
-          <small class="text-muted text-uppercase">Upcoming</small>
-          <h3 class="fw-bold text-warning mb-0">
-            <%= @payment_terms_upcoming.count %>
-          </h3>
-          <small class="text-muted">Due soon</small>
+    <!-- UPCOMING -->
+    <div class="col-md">
+      <a href="#upcoming" class="text-decoration-none">
+        <div class="card shadow-sm border-warning h-100">
+          <div class="card-body">
+            <small class="text-muted text-uppercase">Upcoming</small>
+            <h3 class="fw-bold text-warning mb-0">
+              <%= @payment_terms_upcoming.count %>
+            </h3>
+            <small class="text-muted">Due soon</small>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
+
+    <!-- NEED INVOICE -->
+    <div class="col-md">
+      <a href="#needs-invoice" class="text-decoration-none">
+        <div class="card shadow-sm border-primary h-100">
+          <div class="card-body">
+            <small class="text-muted text-uppercase">Needs Invoice</small>
+            <h3 class="fw-bold text-primary mb-0">
+              <%= @payment_terms_need_issue.count %>
+            </h3>
+            <small class="text-muted">Action required</small>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- OVERDUE -->
+    <div class="col-md">
+      <a href="#overdue" class="text-decoration-none">
+        <div class="card shadow-sm border-danger h-100">
+          <div class="card-body">
+            <small class="text-muted text-uppercase">Overdue</small>
+            <h3 class="fw-bold text-danger mb-0">
+              <%= @payment_terms_overdue.count %>
+            </h3>
+            <small class="text-muted">Urgent</small>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- INVOICED -->
+    <div class="col-md">
+      <a href="#invoiced" class="text-decoration-none">
+        <div class="card shadow-sm border-secondary h-100">
+          <div class="card-body">
+            <small class="text-muted text-uppercase">Invoiced</small>
+            <h3 class="fw-bold mb-0">
+              <%= @payment_terms_invoiced.count %>
+            </h3>
+            <small class="text-muted">Awaiting payment</small>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="col-md">
+      <a href="#completed" class="text-decoration-none">
+        <div class="card shadow-sm border-success h-100">
+          <div class="card-body">
+            <small class="text-muted text-uppercase">Completed</small>
+            <h3 class="fw-bold text-success mb-0">
+              <%= @payment_terms_done.count %>
+            </h3>
+            <small class="text-muted">Paid</small>
+          </div>
+        </div>
+      </a>
+    </div>
+
   </div>
 
-  <!-- NEED INVOICE -->
-  <div class="col-md">
-    <a href="#needs-invoice" class="text-decoration-none">
-      <div class="card shadow-sm border-primary h-100">
-        <div class="card-body">
-          <small class="text-muted text-uppercase">Needs Invoice</small>
-          <h3 class="fw-bold text-primary mb-0">
-            <%= @payment_terms_need_issue.count %>
-          </h3>
-          <small class="text-muted">Action required</small>
-        </div>
+  <!-- SECTIONS -->
+  <% sections = [
+    ["Upcoming Payment Terms", @payment_terms_upcoming, "upcoming", "warning"],
+    ["Needs Invoice", @payment_terms_need_issue, "needs-invoice", "primary"],
+    ["Overdue Payment Terms", @payment_terms_overdue, "overdue", "danger"],
+    ["Invoiced", @payment_terms_invoiced, "invoiced", "secondary"],
+    ["Completed", @payment_terms_done, "completed", "success"]
+  ] %>
+
+  <% sections.each do |title, payment_terms, anchor, color| %>
+    <div class="card shadow-sm mb-4 border-0">
+      <div class="card-header bg-white">
+        <h6 id="<%= anchor %>" class="fw-bold text-<%= color %> mb-0">
+          <%= title %>
+        </h6>
       </div>
-    </a>
-  </div>
 
-  <!-- OVERDUE -->
-  <div class="col-md">
-    <a href="#overdue" class="text-decoration-none">
-      <div class="card shadow-sm border-danger h-100">
-        <div class="card-body">
-          <small class="text-muted text-uppercase">Overdue</small>
-          <h3 class="fw-bold text-danger mb-0">
-            <%= @payment_terms_overdue.count %>
-          </h3>
-          <small class="text-muted">Urgent</small>
-        </div>
-      </div>
-    </a>
-  </div>
-
-  <!-- INVOICED -->
-  <div class="col-md">
-    <a href="#invoiced" class="text-decoration-none">
-      <div class="card shadow-sm border-secondary h-100">
-        <div class="card-body">
-          <small class="text-muted text-uppercase">Invoiced</small>
-          <h3 class="fw-bold mb-0">
-            <%= @payment_terms_invoiced.count %>
-          </h3>
-          <small class="text-muted">Awaiting payment</small>
-        </div>
-      </div>
-    </a>
-  </div>
-
-  <!-- COMPLETED -->
-  <div class="col-md">
-    <a href="#completed" class="text-decoration-none">
-      <div class="card shadow-sm border-success h-100">
-        <div class="card-body">
-          <small class="text-muted text-uppercase">Completed</small>
-          <h3 class="fw-bold text-success mb-0">
-            <%= @payment_terms_done.count %>
-          </h3>
-          <small class="text-muted">Paid</small>
-        </div>
-      </div>
-    </a>
-  </div>
-
-</div>
-
-<% sections = [
-  ["Upcoming", @payment_terms_upcoming, "upcoming"],
-  ["Needs Invoice", @payment_terms_need_issue, "needs-invoice"],
-  ["Overdue", @payment_terms_overdue, "overdue"],
-  ["Invoiced", @payment_terms_invoiced, "invoiced"],
-  ["Completed", @payment_terms_done, "completed"]
-] %>
-
-  <% sections.each do |title, payment_terms, anchor| %>
-    <% next if payment_terms.blank? %>
-
-    <h5 id="<%= anchor %>" class="mt-4 mb-3 fw-semibold">
-    <%= title %>
-    </h5>
-
-    <div class="row g-3">
-      <% payment_terms.each do |payment_term| %>
-        <div class="col-12">
-          <div class="card shadow-sm border-0">
-            <div class="card-body">
-
-              <!-- Header -->
+      <div class="list-group list-group-flush">
+        <% if payment_terms.any? %>
+          <% payment_terms.each do |payment_term| %>
+            <div class="list-group-item py-3 border-start">
               <div class="d-flex justify-content-between align-items-start">
+
+                <!-- LEFT -->
                 <div>
-                  <h6 class="mb-1 fw-semibold">
+                  <div class="fw-semibold">
                     <%= payment_term.description %>
-                  </h6>
+                  </div>
+
+                  <small class="text-muted d-block">
+                    Client: <%= payment_term.contract.client.company_name %>
+                  </small>
 
                   <small class="text-muted">
+                    Target <%= payment_term.target_date %> ·
                     $<%= number_with_precision(payment_term.amount, precision: 2) %>
                   </small>
 
@@ -116,92 +123,84 @@
                       (<%= payment_term.percentage %>% of contract)
                     </small>
                   <% end %>
+                </div>
 
-                  <!-- Payment Term Status -->
+                <!-- RIGHT -->
+                <div class="text-end">
+
                   <% payment_term_badge = {
                     "pending"   => "secondary",
-                    "invoiced"   => "primary",
+                    "invoiced"  => "primary",
                     "due"       => "danger",
                     "completed" => "success"
                   }[payment_term.status] %>
 
-                  <span class="badge rounded-pill bg-<%= payment_term_badge %> ms-2">
+                  <span class="badge bg-<%= payment_term_badge %> mb-2">
                     <%= payment_term.status.titleize %>
                   </span>
-                </div>
 
-                <!-- Amount -->
-                <div class="text-end">
-                  <div class="fw-semibold fs-5">
-                    $<%= number_with_precision(payment_term.amount, precision: 2) %>
+                  <div class="small text-muted mb-2">
+                    <% if payment_term.invoice.present? %>
+                      <% invoice_status = payment_term.invoice.derived_status %>
+
+                      <span class="badge bg-<%= {
+                        "draft"   => "secondary",
+                        "issued"  => "warning",
+                        "paid"    => "success",
+                        "overdue" => "danger"
+                      }[invoice_status] %>">
+                        <%= invoice_status.titleize %>
+                      </span>
+
+                      <span class="ms-1">
+                        Due <%= payment_term.invoice.due_date %>
+                      </span>
+                    <% else %>
+                      Invoice not issued
+                    <% end %>
                   </div>
-                  <small class="text-muted">
-                    Target: <%= payment_term.target_date %>
-                  </small>
-                </div>
-              </div>
-
-              <hr class="my-3">
-
-              <!-- Invoice Status + Actions -->
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <% if payment_term.invoice.present? %>
-                    <% invoice_status = payment_term.invoice.derived_status %>
-
-                    <span class="badge rounded-pill bg-<%= {
-                      "draft"   => "secondary",
-                      "issued"  => "warning",
-                      "paid"    => "success",
-                      "overdue" => "danger"
-                    }[invoice_status] %>">
-                      <%= invoice_status.titleize %>
-                    </span>
-
-                    <small class="text-muted ms-2">
-                      Due <%= payment_term.invoice.due_date %>
-                    </small>
+                  <% if anchor == "completed"%>
                   <% else %>
-                    <span class="text-muted">Invoice not issued</span>
-                  <% end %>
-                </div>
+                  <div class="d-flex gap-1 justify-content-end">
+                    <% if payment_term.invoice.present? %>
+                      <%= link_to "Edit Invoice",
+                          edit_invoice_path(payment_term.invoice),
+                          class: "btn btn-sm btn-outline-secondary" %>
 
-                <!-- Actions -->
-                <div class="d-flex gap-2">
-                  <% if payment_term.invoice.present? %>
-                    <%= link_to "Edit Invoice",
-                        edit_invoice_path(payment_term.invoice),
+                      <%= button_to "Delete Invoice",
+                          invoice_path(payment_term.invoice),
+                          method: :delete,
+                          data: { confirm: "Delete invoice?" },
+                          form: { class: "d-inline" },
+                          class: "btn btn-sm btn-outline-danger" %>
+                    <% else %>
+                      <%= link_to "Issue Invoice",
+                          new_payment_term_invoice_path(payment_term),
+                          class: "btn btn-sm btn-outline-primary" %>
+                    <% end %>
+
+                    <%= link_to "Edit",
+                        edit_payment_term_path(payment_term, contract_id: payment_term.contract_id),
                         class: "btn btn-sm btn-outline-secondary" %>
 
-                    <%= button_to "Delete Invoice",
-                        invoice_path(payment_term.invoice),
+                    <%= button_to "Delete",
+                        payment_term_path(payment_term),
                         method: :delete,
-                        data: { confirm: "Delete invoice?" },
+                        data: { confirm: "Delete payment term?" },
                         form: { class: "d-inline" },
                         class: "btn btn-sm btn-outline-danger" %>
-                  <% else %>
-                    <%= link_to "Issue Invoice",
-                        new_payment_term_invoice_path(payment_term),
-                        class: "btn btn-sm btn-outline-primary" %>
-                  <% end %>
-
-                  <%= link_to "Edit",
-                      edit_payment_term_path(payment_term, contract_id: payment_term.contract_id),
-                      class: "btn btn-sm btn-outline-secondary" %>
-
-                  <%= button_to "Delete",
-                      payment_term_path(payment_term),
-                      method: :delete,
-                      data: { confirm: "Delete payment term?" },
-                      form: { class: "d-inline" },
-                      class: "btn btn-sm btn-outline-danger" %>
+                  </div>
+                <% end %>
                 </div>
               </div>
-
             </div>
+          <% end %>
+        <% else %>
+          <div class="p-3 text-muted small">
+            No items in this section
           </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 

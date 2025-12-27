@@ -1,12 +1,3 @@
 <% content_for :title, "Editing milestone" %>
 
-<h1>Editing milestone</h1>
-
 <%= render "form", milestone: @milestone %>
-
-<br>
-
-<div>
-  <%= link_to "Show this milestone", @milestone %> |
-  <%= link_to "Back to milestones", contract_milestones_path(contract_id: @milestone.contract.id) %>
-</div>

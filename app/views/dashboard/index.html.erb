@@ -9,13 +9,13 @@
   </div>
 
   <!-- BUSINESS OVERVIEW -->
-  <div class="row g-3 mb-4">
+  <!--<div class="row g-3 mb-4">
     <div class="col-md-3">
       <div class="card shadow-sm">
         <div class="card-body">
           <small class="text-muted">Clients</small>
           <h3 class="mb-1"><%= @client_count %></h3>
-          <%= link_to "View clients →", clients_path, class: "small text-decoration-none" %>
+          <%= link_to "View clients →", clientdash_path, class: "small text-decoration-none" %>
         </div>
       </div>
     </div>
@@ -29,23 +29,17 @@
         </div>
       </div>
     </div>
-
-    <div>
-        calendarVIEW
-        <form get url back to root_path>
-            <start date>
-            <end date>
-        </form>
-        
-    </div>
-  </div>
+  </div>-->
 
   <!-- FINANCIAL PERFORMANCE -->
   <div class="card shadow-sm mb-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h6 class="fw-bold mb-0">Invoice Performance</h6>
-        <%= link_to "View invoices →", invoicedash_path, class: "small text-decoration-none" %>
+        <div class="d-flex gap-3">
+         <%= link_to "Analysis →", invoiceanalysis_path, class: "small text-decoration-none" %>
+         <%= link_to "View invoices →", invoicedash_path, class: "small text-decoration-none" %>
+        </div>
       </div>
 
       <div class="row text-center">
@@ -88,12 +82,12 @@
 
   <!-- ATTENTION REQUIRED -->
   <div class="row g-3 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card border-warning shadow-sm">
         <div class="card-body">
           <h6 class="fw-bold text-warning mb-1">⚠️ Invoices to Issue</h6>
           <p class="text-muted small mb-2">
-            Payment terms that are due but not invoiced
+            Payment terms due but not invoiced
           </p>
           <h4 class="mb-2"><%= @payment_terms_need_issue.count %></h4>
           <%= link_to "Review →",
@@ -103,7 +97,22 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
+      <div class="card border-danger shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold text-danger mb-1">🚨 Overdue Milestones</h6>
+          <p class="text-muted small mb-2">
+            Project milestones behind schedule
+          </p>
+          <h4 class="mb-2"><%= @milestones_overdue.count %></h4>
+          <%= link_to "View milestones →",
+              milestonedash_path(anchor: "overdue"),
+              class: "small text-decoration-none" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
       <div class="card border-danger shadow-sm">
         <div class="card-body">
           <h6 class="fw-bold text-danger mb-1">🚨 Overdue Payment Terms</h6>
@@ -118,20 +127,22 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card border-danger shadow-sm">
         <div class="card-body">
-          <h6 class="fw-bold text-danger mb-1">🚨 Overdue Milestones</h6>
+          <h6 class="fw-bold text-danger mb-1">🚨 Overdue Invoices</h6>
           <p class="text-muted small mb-2">
-            Project milestones behind schedule
+            Unpaid Invoices Past Due Date!
           </p>
-          <h4 class="mb-2"><%= @milestones_overdue.count %></h4>
-          <%= link_to "View milestones →",
-              milestonedash_path(anchor: "overdue"),
+          <h4 class="mb-2"><%= @invoices_late.count %></h4>
+          <%= link_to "View overdue →",
+              invoicedash_path(anchor: "late"),
               class: "small text-decoration-none" %>
         </div>
       </div>
     </div>
+
+    
   </div>
 
   <!-- UPCOMING -->

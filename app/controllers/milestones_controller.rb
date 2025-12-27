@@ -41,8 +41,7 @@ class MilestonesController < ApplicationController
   def update
     respond_to do |format|
       if @milestone.update(milestone_params)
-        format.turbo_stream
-        format.html { contract_path(@milestone.contract) }
+        format.html { redirect_to contract_path(@milestone.contract) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @milestone.errors, status: :unprocessable_entity }

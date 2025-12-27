@@ -1,11 +1,5 @@
 <% content_for :title, "New contract" %>
 
-<h1>New contract</h1>
-
 <%= render "form", contract: @contract, client:@client %>
 
 <br>
-
-<div>
-  <%= link_to "Back to contracts", client_contracts_path(@client) %>
-</div>

@@ -1,31 +1,49 @@
-<%= form_with(model: invoice , url: invoice.persisted? ? nil : payment_term_invoices_path(@payment_term)) do |form| %>
-  <% if invoice.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
 
-      <ul>
-        <% invoice.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="mb-0"><%= invoice.persisted? ? "Edit Invoice" : "New Invoice" %></h5>
+        </div>
+
+        <div class="card-body">
+          <%= form_with(model: invoice, url: invoice.persisted? ? nil : payment_term_invoices_path(@payment_term)) do |form| %>
+
+            <% if invoice.errors.any? %>
+              <div class="alert alert-danger">
+                <h6><%= pluralize(invoice.errors.count, "error") %> prohibited this invoice from being saved:</h6>
+                <ul class="mb-0">
+                  <% invoice.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="mb-3">
+              <%= form.label :issue_date, class: "form-label" %>
+              <%= form.date_field :issue_date, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :due_date, class: "form-label" %>
+              <%= form.date_field :due_date, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :paid_date, class: "form-label" %>
+              <%= form.date_field :paid_date, class: "form-control" %>
+            </div>
+
+            <div class="d-grid">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+
     </div>
-  <% end %>
-  <div>
-    <%= form.label :issue_date, style: "display: block" %>
-    <%= form.date_field :issue_date %>
   </div>
-
-  <div>
-    <%= form.label :due_date, style: "display: block" %>
-    <%= form.date_field :due_date %>
-  </div>
-
-  <div>
-    <%= form.label :paid_date, style: "display: block" %>
-    <%= form.date_field :paid_date %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

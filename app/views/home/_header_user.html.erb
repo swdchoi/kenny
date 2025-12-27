@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+<nav class="navbar navbar-expand-lg navbar-light rounded bg-white shadow-sm py-3">
   <div class="container">
 
     <!-- Brand -->
-    <%= link_to "Kenny", root_path, class: "navbar-brand fw-bold fs-4" %>
+    <%= link_to "😎 Kenny", root_path, class: "navbar-brand fw-bold fs-4" %>
 
     <!-- Mobile toggle -->
     <button
@@ -37,7 +37,7 @@
         </li>
 
          <li class="nav-item">
-          <%= link_to "Invoices", invoicedash_path, class: "nav-link" %>
+          <%= link_to "Invoices", invoicedash_path, class: "nav-link", data: {turbo: false} %>
         </li>
 
         <li class="nav-item ms-lg-3">

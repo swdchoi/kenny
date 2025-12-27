@@ -28,8 +28,8 @@ class Invoice < ApplicationRecord
 
   scope :issued, -> { where.not(issue_date: nil) }
   scope :collected, -> { where.not(paid_date: nil) }
-  scope :outstanding, -> { issued.where(paid_date: nil) }
-  scope :late, -> { outstanding.where("due_date < ?", Date.today) }
+  scope :outstanding, -> { issued.where(paid_date: nil).where("due_date >= ?", Date.current) }
+  scope :late, -> { where("due_date < ?", Date.today).where(paid_date: nil) }
 
   private
 

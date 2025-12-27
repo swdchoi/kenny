@@ -1,58 +1,71 @@
 class InvoicesController < ApplicationController
   before_action :set_invoice, only: %i[ show edit update destroy ]
 
-  def analysis
-      # Time ranges
-      @current_month = Time.current.beginning_of_month..Time.current.end_of_month
-      @next_3_months = Time.current..(Time.current + 3.months)
+def analysis
+  # =========================
+  # Time ranges
+  # =========================
+  @last_30_days = 30.days.ago.beginning_of_day..Time.current
+  @today        = Date.current
+  @next_30_days = @today..30.days.from_now
+  @next_60_days = @today..60.days.from_now
+  @next_90_days = @today..90.days.from_now
 
-      # =========================
-      # KPIs (SUM payment_terms.amount)
-      # =========================
+  # =========================
+  # LAST 30 DAYS PERFORMANCE
+  # =========================
 
-      @issued_total = Invoice
-        .issued
-        .joins(:payment_term)
-        .where(issue_date: @current_month)
-        .sum("payment_terms.amount")
+  @issued_total = Invoice
+    .where(issue_date: @last_30_days)
+    .joins(:payment_term)
+    .sum("payment_terms.amount")
 
-      @paid_total = Invoice
-        .paid
-        .joins(:payment_term)
-        .where(paid_date: @current_month)
-        .sum("payment_terms.amount")
+  @collected_total = Invoice
+    .where(paid_date: @last_30_days)
+    .joins(:payment_term)
+    .sum("payment_terms.amount")
 
-      @outstanding_total = Invoice
-        .where(status: [ :issued, :overdue ])
-        .joins(:payment_term)
-        .sum("payment_terms.amount")
+  @outstanding_total = Invoice
+    .where(issue_date: ..@today)
+    .where(paid_date: nil)
+    .joins(:payment_term)
+    .sum("payment_terms.amount")
 
-      @overdue_total = Invoice
-        .overdue
-        .joins(:payment_term)
-        .sum("payment_terms.amount")
+  @overdue_total = Invoice
+    .where(issue_date: ..@today)
+    .where(paid_date: nil)
+    .where("due_date < ?", @today)
+    .joins(:payment_term)
+    .sum("payment_terms.amount")
 
-      # =========================
-      # Upcoming invoices
-      # =========================
+  # =========================
+  # FORWARD-LOOKING PROJECTIONS
+  # =========================
 
-      @upcoming_invoices = Invoice
-        .issued
-        .where(due_date: @next_3_months)
-        .includes(payment_term: :contract)
-        .order(:due_date)
+  @due_next_30 = upcoming_total(@next_30_days)
+  @due_next_60 = upcoming_total(@next_60_days)
+  @due_next_90 = upcoming_total(@next_90_days)
 
-      # =========================
-      # Chart: invoices issued over time
-      # =========================
+  # =========================
+  # UPCOMING INVOICES (TABLE)
+  # =========================
 
-      @monthly_stats = Invoice
-        .issued
-        .joins(:payment_term)
-        .where(issue_date: 6.months.ago.beginning_of_month..Time.current)
-        .group_by_month(:issue_date)
-        .sum("payment_terms.amount")
-  end
+  @upcoming_invoices = Invoice
+    .where(paid_date: nil)
+    .where(due_date: @next_90_days)
+    .includes(payment_term: :contract)
+    .order(:due_date)
+
+  # =========================
+  # CHART (Last 6 months)
+  # =========================
+
+  @monthly_stats = Invoice
+    .where(issue_date: 6.months.ago.beginning_of_month..Time.current)
+    .joins(:payment_term)
+    .group_by_month(:issue_date)
+    .sum("payment_terms.amount")
+end
   # GET /invoices or /invoices.json
   def index
     @payment_term = PaymentTerm.find(params[:payment_term_id])
@@ -119,6 +132,14 @@ class InvoicesController < ApplicationController
   end
 
   private
+
+  def upcoming_total(range)
+  Invoice
+    .where(paid_date: nil)
+    .where(due_date: range)
+    .joins(:payment_term)
+    .sum("payment_terms.amount")
+  end
     # Use callbacks to share common setup or constraints between actions.
     def set_invoice
       @invoice = Invoice.find(params.expect(:id))
